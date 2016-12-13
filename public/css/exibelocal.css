@@ -1,0 +1,18 @@
+/* 
+    Document   : exibelocal
+    Created on : 17/09/2013, 21:44:07
+    Author     : Morbach
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+
+/*
+Se a mídia for menor que 768px, posiciona os botoes à direta da página
+*/
+
+@media (max-width:768px){
+    #btnAcaoLocal{
+        /*float: right !important;*/
+    }
+}

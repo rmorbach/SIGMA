@@ -1,0 +1,67 @@
+<div class="row">    
+    <div class="col-xs-12 col-md-12 col-lg-12">  
+        <div class="page-header"><h2>Últimos leituras</h2></div>
+        <?php
+        if (!empty($this->logs)):
+            foreach ($this->logs as $local):
+                ?>                            
+                <div class="col-xs-12 col-md-11 col-lg-12">
+                    <div class="page-header"><h3><?php echo utf8_encode(ucfirst($local['local']['nm_local'])); ?></h3></div>    
+                    <?php foreach ($local['secoes'] as $key => $secao):
+                        ?>
+                        <div class="panel panel-info ">
+                            <div class="panel-heading">
+                                <h2 class="panel-title"><?php echo utf8_encode($secao['nm_secao']); ?> - Últimas leituras</h2>
+                            </div>
+                            <div class="panel-body">
+                                <?php if (!empty($secao['sensores'])): ?>
+                                    <?php foreach ($secao['sensores'] as $k => $sensor): ?>
+                                        <?php if (!empty($sensor['id'])): ?>                                            
+                                            <h4><span  class="text-success">Sensor:</span> <a href="/sensor/dadossensor/idsensor/<?php echo $sensor['id'] ?>/idradio/<?php echo $sensor['id_radio'] ?>/idlocal/<?php echo $local['local']['id']; ?>/idsecao/<?php echo $secao['id_secao'] ?>" title="Visualizar todos os dados"><?php echo utf8_encode($sensor['nm_sensor']); ?></a><span class="text-success"> Unidade de medida </span><?php echo utf8_encode($sensor['nm_unidade_medida']) . " - " . $sensor['fl_unidade_medida']; ?></h4>
+                                            <div class="row">
+                                                <?php if (count($secao['sensores']['log'][$k]) > 0): ?>
+                                                    <div class="col-lg-8 col-md-10 col-lg-offset-2 col-xs-12">                                                   
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-hover table-bordered text-center">                                                        
+                                                                <tr><th>Valor</th><th>Data e hora do registro</th></tr>                                                                              
+                                                                <?php $sum = 0;                                                                
+                                                                foreach ($secao['sensores']['log'][$k] as $log): $sum += $log['vl_dado']; ?>         
+                                                                    <tr>
+                                                                        <td><?php echo $log['vl_dado']; ?></td>                                                            
+                                                                        <td><?php echo date('d M Y', strtotime($log['dt_hr_registro'])); ?> às <?php echo date('H:i:s', strtotime($log['dt_hr_registro'])); ?></td>   
+                                                                    </tr>
+                                                                <?php endforeach; ?>
+                            <?php if ($sum > 0): ?>   
+                                                                    <tr>
+                                                                        <td><span class="text-info"><strong>Média: <?php echo ($sum / count($secao['sensores']['log'][$k])); ?></strong></span> </td>
+                                                                        <td></td>
+                                                                    </tr>
+                            <?php endif; ?>  
+                                                            </table>                                                                    
+                                                        </div><!-- close div table-responsive -->                                                     
+                                                    </div>
+                                                <?php else: ?>
+                                                    <div class="alert alert-warning">Nenhum log encontrado</div>
+                                            <?php endif; ?>
+                                            </div>  
+                                        <?php else: ?>
+                                            <!--<div class="alert alert-warning">Nenhum log encontrado</div>-->
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="alert alert-warning">Nenhum sensor cadastrado</div>    
+            <?php endif; ?>
+
+                            </div>
+                        </div>  
+        <?php endforeach; ?>
+                </div>
+                <div class="col-lg-10 col-md-5 col-xs-10" id="alerta-radios">                            
+                    <div class="alert alert-info hidden"><span class="glyphicon glyphicon-warning-sign"></span> <strong>Nenhum rádio cadastrado</strong></div>
+                </div>                                                  
+                <?php
+            endforeach;
+        endif;
+        ?>                            
+    </div>        
+</div>     

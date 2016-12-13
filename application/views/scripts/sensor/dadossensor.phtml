@@ -1,0 +1,121 @@
+<?php echo $this->headTitle(); ?>
+<div class="col-xs-12 col-lg-12 col-md-12">    
+    <div class="page-header">
+        <h3><ol class="breadcrumb"><li><span class="hidden-xs">Seções</span></li><li class="active"><strong><a href="/locais/exibelocal/id/<?php echo $this->idLocal; ?>" title="Visualizar local"><?php echo $this->local; ?></a></strong></li> <li><strong><a href="/secoes/index/local/<?php echo $this->local ?>/idlocal/<?php echo $this->idLocal ?>/id/<?php echo $this->idSecao ?>" title="Clique para voltar para a seção"><?php echo utf8_encode($this->secao); ?></a></strong></li></ol></h3>
+    </div>    
+    <div id="alerta" class="col-xs-12"></div>
+    <div class="row">
+        <div class="col-xs-12 col-lg-12 col-md-12">
+            <?php if (!empty($this->dadosSensor)): ?>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Sensor: <?php echo utf8_encode($this->dadosSensor['nm_sensor']); ?></div>
+                    <div class="panel-body">                        
+                        <button type="button" class="btn btn-danger pull-right" title="Remover Sensor" onclick="removerSensor('<?php echo $this->dadosSensor['id'] ?>')"><span class="glyphicon glyphicon-trash"></span></button>                           
+                        <div id="info-sensor">
+                            <div class="text-left">
+                                <span class="text text-primary">Nome sensor: </span>
+                                <span class="text text-muted nm_sensor"><?php echo utf8_encode($this->dadosSensor['nm_sensor']); ?></span>
+                            </div>                    
+                            <div class="text-left ">
+                                <span class="text text-primary">Descrição:</span>
+                                <span class="text text-muted ds_sensor"><?php echo utf8_encode($this->dadosSensor['ds_sensor']); ?></span>
+                            </div>    
+                            <div class="text-left ">
+                                <span class="text text-primary">Unidade de medida:</span>
+                                <span class="text text-muted un_medida"><?php echo utf8_encode($this->dadosSensor['nm_unidade_medida']) . " - " . $this->dadosSensor['fl_unidade_medida']; ?></span>
+                            </div> 
+                            <div class="text-left ">
+                                <span class="text text-primary">Url de log:</span>
+                                <span class="text text-success url"><?php echo utf8_encode($this->dadosSensor['get_url']); ?></span>
+                            </div> 
+                            <div class="text-left">
+                                <fieldset>
+                                    <legend><h4>Web service</h4></legend>
+                                    <span class="text text-primary">Permite acesso via API:</span>
+                                    <span class="text text-success in_webservice"><?php echo (($this->dadosSensor['in_webservice'] == "S") ? "Sim" : "Não"); ?></span>
+                                </fieldset>
+                            </div>    
+                        </div>  
+
+                        <div class="pull-right">
+                            <button class="btn btn-primary" id='btn-edit' title="Editar sensor" onclick="editarSensor()"><span class="glyphicon glyphicon-edit"></span></button>
+                        </div>    
+                        <div id="form-edit" class="form-group col-xs-11 col-md-10 col-lg-10 hidden">
+                            <fieldset>
+                                <legend>Editar sensor</legend>
+                                <div class="form-group">
+                                    <label for="nm_sensor">Nome do sensor:</label>
+                                    <input type="text" class="form-control" id="nm_sensor" value="<?php echo utf8_encode($this->dadosSensor['nm_sensor']); ?>"/>                                
+                                </div>
+                                <div class="form-group">
+                                    <label for="descricao">Descrição</label>
+                                    <textarea rows="2" class="form-control" id="descricao"><?php echo utf8_encode($this->dadosSensor['ds_sensor']); ?></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nm_unidade_medida">Unidade de medida</label>
+                                    <input type="text" class="form-control" id="nm_unidade_medida" value="<?php echo utf8_encode($this->dadosSensor['nm_unidade_medida']); ?>"/>
+                                    <label for="fl_unidade_medida">Sigla</label>
+                                    <input type="text" class="form-control" id="fl_unidade_medida" value="<?php echo $this->dadosSensor['fl_unidade_medida']; ?>"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="url">URL de log:</label>
+                                    <input type="text" class="form-control" id="url" value="<?php echo utf8_encode($this->dadosSensor['get_url']); ?>"/>                                
+                                </div>
+                                <div class="form-group">
+                                    <label for="webservice">Permitir acesso via webservice:</label>
+                                    <select id="webservice">
+                                        <option value="S" <?php if($this->dadosSensor['in_webservice'] == "S"): ?> selected <?php endif;?>>Sim</option>
+                                        <option value="N" <?php if($this->dadosSensor['in_webservice'] == "N"): ?> selected <?php endif;?>>Não</option>
+                                    </select>                                       
+                                </div>
+                                <button class='btn btn-success disabled' title='Salvar' onclick='salvarSensor()'>Salvar</button>
+                            </fieldset>
+                        </div>   
+                    </div>                     
+                    <div class="panel-footer"></div>
+                </div>         
+            <?php else: ?>
+                <div class="alert alert-info">Nenhum sensor encontrado!</div>            
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php if (!empty($this->dadosSensor)): ?>
+        <div class="row"> 
+            <div class="col-xs-12 col-md-8 col-lg-8">
+                <div class="form-inline blocoPesquisa">                  
+                    <fieldset>    
+                        <legend>Intervalo para pesquisa: </legend>
+                        <div class="form-group">
+                            <label for="dtInicial">Data inicial</label>
+                            <input type="date" id="dtInicial" value="<?php echo date('d-m-Y', strtotime("-7days")); ?>"class="form-control" placeholder="__ - __ - __"/>                    
+                        </div>
+                        <div class="form-group">
+                            <label for="dtFinal">Data final</label>
+                            <input type="date" class=" form-control" value="<?php echo date('d-m-Y'); ?>" id="dtFinal" placeholder="__ - __ - __"/>
+                        </div>                        
+                        <button class="btn btn-primary" onclick="buscarDados()" title="Clique para pesquisar">Pesquisar</button>                                                                      
+                    </fieldset>                 
+                </div>
+            </div>    
+            <div class="col-xs-12 col-md-12 col-lg-12"> 
+                <div class="options-chart pull-right">
+                    <div class="icon-chart chart-column pull-left" onclick="changeChart('column')" title="Mudar para gráfico de colunas"></div>
+                    <div class="icon-chart chart-line pull-left" onclick="changeChart('line')" title="Mudar para gráfico de linhas"></div>
+                </div>
+                <div class="options-chart pull-right">
+                    <div class="icon-chart text-icon pull-left" onclick="criarTxt()" title="Exportar para arquivo de texto"></div>                
+                    <div id="download-link"></div>
+                </div>
+                <div id="chart" style="width:100%; height:400px;" class="pull-left"></div>            
+            </div>
+        </div>
+    <?php endif; ?>
+</div>    
+<script>
+    var idRadio = <?php echo $this->idRadio ?>;
+    var idSensor = <?php echo $this->idSensor ?>;
+</script>
+<?php echo $this->headLink()->appendStylesheet('/css/dadossensor.css'); ?>
+<script src="/js/libs/highchart/js/highcharts.js"></script>
+<script src="/js/dadosSensor.js"></script>
+<script src="/js/libs/jquery.mask.min.js"></script>

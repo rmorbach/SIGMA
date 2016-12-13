@@ -1,0 +1,201 @@
+<?php echo $this->headLink()->appendStylesheet("/css/indexSecao.css"); ?>
+<?php echo $this->headTitle(); ?>
+<script>
+    id_local = '<?php echo $this->idlocal; ?>';
+    id_secao = '<?php echo $this->idSecao; ?>';
+    nm_secao = '<?php echo utf8_encode($this->dados['nm_secao']) ?>';
+    nm_local = '<?php echo utf8_encode($this->local) ?>';
+    gateway = '<?php echo $this->gateway['end_ip']; ?>';
+    id_gateway = '<?php echo $this->gateway['id']; ?>';
+
+    /*
+     * 07/03/2014
+     */
+
+    opt = '<?php echo trim($this->gateway['opt']); ?>';
+
+    arrayRadios = Array();
+    dadosTopologia = new Object();
+    dadosTopologia.dados = [{}];
+</script>    
+<div class="row"><!-- Abraça as duas colunas -->  
+    <div class="page-header">
+        <h3><ol class="breadcrumb"><li>Seções</li><li class="active"><strong><a href="/locais/exibelocal/id/<?php echo $this->idlocal; ?>" title="Visualizar local"><?php echo $this->local; ?></a></strong></li> <li><strong><?php echo utf8_encode($this->dados['nm_secao']); ?></strong></li></ol></h3>
+    </div>
+    <div id="alerta" class="col-xs-12 col-md-12"></div>
+    <div class="col-xs-12 col-md-12">        
+        <?php if (isset($this->dados)): ?>                   
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Dados</h3>
+                </div>
+                <div class="panel-body">   
+                    <div id="info-secao-gateway">
+                        <div class="pull-right clearpad">
+                            <button type="button" class="btn btn-success" title="Gerenciar políticas"><span class="hidden-xs">Gerenciar políticas <span class="glyphicon glyphicon-dashboard"></span></span> <span class="glyphicon glyphicon-dashboard visible-xs"></span></button>                        
+                            <?php if ($this->dados['in_ativo'] == "S"): ?>
+                                <button type="button" class="btn btn-danger"  title="Remover seção" <?php if (!empty($this->idSecao)): ?>id="btn-<?php echo $this->idSecao; ?>" onclick="mudarStatus(<?php echo $this->dados['id']; ?>, '<?php echo $this->dados['in_ativo'] ?>')" <?php endif; ?>><span class="hidden-xs">Remover Seção <span class="glyphicon glyphicon-trash"></span></span><span class="glyphicon glyphicon-trash visible-xs"></span></button>
+                            <?php else: ?>
+                                <button type="button" class="btn btn-success" title="Restaurar seção" <?php if (!empty($this->idSecao)): ?>id="btn-<?php echo $this->idSecao; ?>" onclick="mudarStatus(<?php echo $this->dados['id']; ?>, '<?php echo $this->dados['in_ativo'] ?>')" <?php endif; ?>><span class="hidden-xs">Restaurar Seção <span class="glyphicon glyphicon-refresh"></span></span><span class="glyphicon glyphicon-trash visible-xs"></span></button>
+                            <?php endif; ?>                            
+                        </div>                                                                            
+                        <p class="lead"><?php echo utf8_encode($this->dados['ds_secao']); ?></p>         
+                        <?php if (isset($this->gateway)): ?>                
+                            <p class="text-primary">Gateway: <span class="label label-info gateway"><?php echo utf8_encode($this->gateway['nm_gateway']); ?></span> Endereço IP:  <span class="label label-info label-warning ip"><?php echo $this->gateway['end_ip']; ?></p>                   
+                        <?php endif; ?>               
+                <p class="text-primary"><!--<a href="/radios/index/idsecao/<?php // echo $this->idSecao;   ?>">-->Rádios sensores:</a> <span class='badge' title="Quantidade de rádios"><?php echo $this->qtdRadios['qtd_radios']; ?></span></p>                            
+                    </div>
+                    <div class="pull-left">
+                        <button class="btn btn-warning" id='btn-reboot' title="Reiniciar gateway" onclick="reiniciarGateway()"><span class="glyphicon glyphicon-refresh"></span></button>
+                    </div>
+                    <div class="pull-right">
+                        <button class="btn btn-primary" id='btn-edit' title="Editar gateway" onclick="editarDados()"><span class="glyphicon glyphicon-edit"></span></button>
+                    </div>    
+                    <div id="form-edit" class="form-group col-xs-11 col-md-10 col-lg-10 hidden">
+                        <fieldset>
+                            <legend>Editar dados</legend>
+                            <div class="form-group">
+                                <label for="descricao">Descrição da seção:</label>
+                                <textarea rows="2" class="form-control" id="descricao"><?php echo utf8_encode($this->dados['ds_secao']); ?></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="gateway">Identificador do Gateway</label>
+                                <input type="text" class="form-control" id="gateway" value="<?php echo utf8_encode($this->gateway['nm_gateway']); ?>"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="ip">Endereço IP</label>
+                                <input type="text" class="form-control" id="ip" value="<?php echo $this->gateway['end_ip']; ?>"/>
+                            </div>
+                            <div id="form-autenticacao">                                
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="check-auth" <?php if (!empty($this->gateway['login'])): ?> checked <?php endif; ?>> Utiliza autenticação
+                                    </label>
+                                </div>         
+                                <div class="form-group">
+                                    <label for="user-gateway">Usuário:</label>
+                                    <input type="text" placeholder="Informe o usuário" class="form-control"  <?php if (!empty($this->gateway['login'])): ?> value="<?php echo $this->gateway['login']; ?>" <?php else: ?> readonly <?php endif; ?> name="user-gateway" id="user-gateway"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="senha-gateway">Senha:</label>
+                                    <input type="password" placeholder="Informe a senha" class="form-control" readonly name="senha-gateway" id="senha-gateway"/>
+                                </div>
+                            </div>    
+                            <button class='btn btn-success disabled' title='Salvar' onclick='salvarEdicao()'>Salvar</button>
+                        </fieldset>
+                    </div>    
+                </div>
+            </div>    
+        <?php endif; ?>                 
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">                                      
+            <div class="col-xs-12 col-md-11 col-lg-12">
+                <?php if (!empty($this->dadosRadios)): ?>                                                                  
+                    <div class="panel panel-primary ">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Rádios sensores</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-2 pull-right">
+                                    <button class="btn btn-primary pointer" onclick="executaRCI(gateway, 'pesquisarNos');" title="Pesquisar rádios">Pesquisar rádios <span class="glyphicon glyphicon-search"></span></button>
+                                </div> 
+                            </div>
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover" id="tabela-radios">
+                                        <tr><th>Rádio</th><th>Função</th><th>MAC</th><th>Pan ID</th><th>Net ID</th><th>Sensor</th><th>Ativo</th><th></th></tr>                                                                              
+                                        <?php foreach ($this->dadosRadios as $key => $radio): ?>         
+                                            <script>
+                                                arrayRadios[<?php echo $key ?>] = '<?php echo $radio['high_id']; ?>';
+                                                dadosTopologia.dados[<?php echo $key ?>] = {node: "<?php echo $radio['high_id']; ?>", dest_addr: "<?php echo (!empty($radio['dest_addr']) ? $radio['dest_addr'] : 0); ?>"};
+                                            </script>
+                                            <tr id="<?php echo $radio['id_radio']; ?>">
+                                                <td><a href="/radios/configradios/secao/<?php echo utf8_encode($this->dados['nm_secao']) ?>/idradio/<?php echo $radio['id_radio']; ?>/local/<?php echo $this->local ?>/idlocal/<?php echo $this->idlocal ?>/idsecao/<?php echo $this->idSecao; ?>/mac/<?php echo $radio['high_id'] ?>/gateway/<?php echo $this->gateway['end_ip'] ?>/idgateway/<?php echo $this->gateway['id']; ?>/opt/<?php echo $this->gateway['opt'] ?>" title="Ver configurações"><?php echo utf8_encode($radio['nm_radio']); ?></a></td>
+                                                <td><?php echo (!empty($radio['ds_funcao']) ? utf8_encode($radio['ds_funcao']) : "<i>Vazio</i>"); ?></td>
+                                                <td><a href="/radios/configradios/secao/<?php echo utf8_encode($this->dados['nm_secao']) ?>/idradio/<?php echo $radio['id_radio']; ?>/local/<?php echo $this->local ?>/idlocal/<?php echo $this->idlocal ?>/idsecao/<?php echo $this->idSecao; ?>/mac/<?php echo $radio['high_id'] ?>/gateway/<?php echo $this->gateway['end_ip'] ?>/idgateway/<?php echo $this->gateway['id']; ?>/opt/<?php echo $this->gateway['opt'] ?>" title="Ver configurações"><?php echo utf8_encode($radio['high_id']); ?></a></td>
+                                                <td><?php echo utf8_encode($radio['pan_id']); ?></td>
+                                                <td><?php echo utf8_encode($radio['net_id']); ?></td>                                                
+                                                <td><div id="sensor-<?php echo $radio['id_radio']; ?>">
+                                                        <?php
+                                                        if (!empty($radio['sensores'])):
+                                                            foreach ($radio['sensores'] as $sensor):
+                                                                ?>
+                                                                <div><a href='/sensor/dadossensor/idsensor/<?php echo $sensor['id']; ?>/idradio/<?php echo $radio['id_radio']; ?>/idlocal/<?php echo $this->idlocal; ?>/idsecao/<?php echo $this->idSecao ?>' title="Clique para ver os dados do sensor <?php echo utf8_encode($sensor['nm_sensor']); ?>"><span class='pointer text-info'><?php echo utf8_encode($sensor['nm_sensor']); ?></span></a></div>
+                                                                <?php
+                                                            endforeach;
+                                                        elseif (strtolower(trim($radio['ds_funcao'])) == "coordenador"):
+                                                            ?>
+                                                            <script>
+                                                                dadosTopologia.coordenador = "<?php echo $radio['high_id']; ?>";
+                                                            </script>   
+                                                            <span class='pointer text-muted' title='Dispositivo coordenador'>Nenhum</span>
+                                                        <?php else:
+                                                            ?>
+                                                            <span class='pointer text-info' title='Cadastrar Sensor' onclick='showFormSensor("<?php echo $radio['id_radio']; ?>")'>Nenhum</span>
+                                                        <?php
+                                                        endif;
+                                                        ?>
+                                                    </div>
+                                                </td>                                                
+                                                <td><div class="div-status icon-refresh" id="status-<?php echo $key; ?>"><span class="" title="Verificando"></span></div><!--<select><option value="S"<?php /* if ($radio['in_ativo'] == "S"): ?> selected<?php endif; ?>>S</option><option value="N" <?php if ($radio['in_ativo'] == "N"): ?> selected<?php endif; */ ?>>N</option></select>--></td>
+                                                <td><span  onclick="removerRadio('<?php echo $radio['id_radio'] ?>')"><span class="glyphicon glyphicon-remove pointer" title="Excluir rádio"></span></span></td>
+                                            </tr>            
+                                        <?php endforeach; ?>
+                                    </table>                                                                    
+                                </div><!-- close div table-responsive -->
+                                <div class="row">
+                                    <div class="col-xs-6 col-md-1 col-lg-2 pull-right">
+                                        <button title="" id="btnVerLog" class="btn btn-block" data-original-title="Visualizar log"> Ver Log <span class="glyphicon glyphicon-list-alt"> </span></button>  
+                                    </div>
+                                    <div class="col-xs-6 col-md-1 col-lg-2 pull-right">
+                                        <button title="" id="btnVerTopologia" class="btn btn-primary" data-original-title="Visualizar topologia"> Ver topologia <span class="glyphicon glyphicon-eye-open"> </span></button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>                                      
+                </div>
+                <div class="col-lg-10 col-md-5 col-xs-10" id="alerta-radios">                            
+                    <div class="alert alert-info hidden"><span class="glyphicon glyphicon-warning-sign"></span> <strong>Nenhum rádio cadastrado</strong></div>
+                </div>      
+            <?php else: ?>     
+                <div class="col-xs-12 col-md-12 hidden" id="panel-radios">                                      
+                    <div class="col-xs-12 col-md-12">                                                                                  
+                        <div class="panel panel-primary ">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Rádios sensores</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="table-responsive" id="novos-radios"></div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12 col-xs-12 left clearpad">
+                    <button class="btn btn-primary pull-right pointer" onclick="executaRCI(gateway, 'pesquisarNos');" title="Pesquisar rádios">Pesquisar rádios <span class="glyphicon glyphicon-search"></span></button>
+                </div> 
+                <div class="col-lg-10 col-md-5 col-xs-10" id="alerta-radios">                            
+                    <div class="alert alert-info"><span class="glyphicon glyphicon-warning-sign"></span> <strong>Nenhum rádio cadastrado</strong></div>
+                </div>                  
+            <?php endif; ?>     
+            <div class="col-lg-10 col-md-5 col-xs-10" id="div-form-sensor">
+            </div> 
+            <div class="row" id="div-topologia">               
+                <div class="col-lg-11 col-md-12 col-xs-9" id="div-form-sensor">     
+                    <h5>Topologia atual</h5>
+                    <canvas width="600" height="200" class="hidden-xs" id="canvas-topology">
+
+                    </canvas>
+                </div>
+            </div>  
+        </div>        
+    </div>        
+</div> <!-- fecha a div principal -->
+<script src="/js/indexSecao.js"></script>
+<script src="/js/drawTopology.js"></script>
+<script src="/js/libs/jquery.mask.min.js"></script>

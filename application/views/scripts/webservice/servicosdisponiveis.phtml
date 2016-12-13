@@ -1,0 +1,101 @@
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">        
+        <div class="col-md-8 col-lg-10 col-sm-12">      
+            <div class="col-md-8 col-lg-10 col-md-offset-2  col-lg-offset-2 col-sm-12">      
+                <p>O sistema fornece acesso aos dados coletados pelas redes de sensores implantadas no município através da interface API REST.</p>
+                <p>A URI para chamada de dados de determinado ambiente segue o seguinte formato:</p>
+                <p class="text-info">http://<?php echo $_SERVER['REMOTE_ADDR'] ;?>/rest/webservices/servico/buscardados/local/<span class="text-danger">{nome_local}</span>/secao/<span class="text-danger">{nome_secao}</span>/sensor/<span class="text-danger">{nome_sensor}</span>/dtInicial/<span class="text-danger">{ano-mes-dia}</span>/dtFinal/<span class="text-danger">{ano-mes-dia}</span>/formato/<span class="text-danger">{xml ou json}</span></p>
+                <p> Os parâmetros necessários são explicados na tabela abaixo</p>
+            </div>            
+            <div class="col-lg-10 col-md-8 col-lg-offset-2 col-xs-12">                                                   
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">Parâmetros para acesso aos dados via Web service</div>
+                    <div class="table-responsive">
+                        <table class="table"> 
+                            <tr>
+                                <th>Parâmetro</th>
+                                <th>Tipo</th>
+                                <th>Descrição</th>
+                            </tr>
+                            <tr>
+                                <td>local</td>
+                                <td>String</td>
+                                <td>Corresponde ao nome do local de onde se deseja obter informações. Pode ser informado o nome completo ou somente parte dele.</td>
+                            </tr>
+                            <tr>
+                                <td>secal</td>
+                                <td>String</td>
+                                <td>Corresponde ao nome da secao de um local de onde se deseja obter informações. Pode ser informado o nome completo ou somente parte dele.</td>
+                            </tr>
+                            <tr>
+                                <td>sensor</td>
+                                <td>String</td>
+                                <td>Corresponde ao nome do sensor reponsável pela coleta dos dados. Pode ser informado o nome completo ou somente parte dele.</td>
+                            </tr>
+                            <tr>
+                                <td>dtInicial</td>
+                                <td>Date</td>
+                                <td>Corresponde a data inicial do período de tempo desejado. O formato desse parâmetro é o americano, ou seja, ano-mes-dia (yyyy-mm-dd) separados por hífen (-)</td>
+                            </tr>
+                            <tr>
+                                <td>dtFinal</td>
+                                <td>Date</td>
+                                <td>Corresponde a data final do período de tempo desejado. O formato desse parâmetro é o americano, ou seja, ano-mes-dia (yyyy-mm-dd) separados por hífen (-)</td>
+                            </tr>
+                            <tr>
+                                <td>formato</td>
+                                <td>String</td>
+                                <td>Corresponde ao formato de resposta desejado. Estão disponíveis o XML ou JSON.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-10 col-md-8 col-lg-offset-2 col-xs-12">    
+                <h3>Abaixo são listados alguns locais que disponibilizam seus dados via API REST</h3>                                                               
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">Locais com acesso via Web Service</div>
+                    <div class="table-responsive">
+                        <table class="table"> 
+                            <tr>
+                                <th>Local</th>
+                                <th>Seção</th>
+                                <th>Sensor</th>
+                            </tr>
+                            <?php 
+                            $countTotal = count($this->dados);
+                            $countLocais = 0;
+                            $countSecoes = 0;                            
+                            foreach ($this->dados as $key=>$dado): ?>                                
+                                    <?php if(($key>0) && ($this->dados[$key]['nm_local'] == $this->dados[$key-1]['nm_local'])):?>                                    
+                                    <?php $countLocais++;?>                                    
+                                    <?php endif;?>
+                                    <?php if(($key>0) && ($this->dados[$key]['nm_secao'] == $this->dados[$key-1]['nm_secao'])):?>                                    
+                                    <?php $countSecoes++;?>
+                                    <?php endif;?>    
+                            <?php endforeach; ?>
+                            <?php foreach ($this->dados as $key=>$dado): ?>
+                            <tr>
+                                    <?php if($key == 0): ?>
+                                <td rowspan="<?php echo $countLocais+1 ?>" style="vertical-align: middle"><?php echo $dado['nm_local']; ?></td>
+                                <td rowspan="<?php echo $countSecoes+1 ?>" style="vertical-align: middle"><?php echo $dado['nm_secao']; ?></td>
+                                
+                                    <?php elseif($key > 0 && $key <= $countLocais): ?>  
+                              
+                                    <?php elseif($key > $countLocais): ?>
+                                    <td><?php echo $dado['nm_local']; ?></td>
+                                                                    <td></td>
+                                    <td></td>
+                                    <?php endif;?>                                                                        
+                                    <td><?php echo $dado['nm_sensor']; ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>        
+</div>

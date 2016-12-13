@@ -1,0 +1,141 @@
+<?php
+$sessao = Zend_Auth::getInstance();
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+        <title>Sigma - Bem-Vindo</title>
+        <!--[if lt IE 9]><script type="text/javascript" src="/js/libs/html5shiv.min.js"></script><![endif]-->
+        <link type="text/css" rel="stylesheet" href="/css/libs/bootstrap.min.css">
+        <link type="text/css" rel="stylesheet" href="/css/login.css">
+        <link type="text/css" rel="stylesheet" href="/css/libs/pwstrength.css">
+        <link type="text/css" rel="stylesheet" href="/css/libs/webfonts.css">
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div class="col-xs-12 clearpad">
+                    <section class="boxConteudo text-center">
+                        <h1>
+                            <span id="tituloIM" class="text-white col-xs-12 col-sm-8 clearpad" title="Bem vindo!">Bem-vindo ao <strong>Sigma</strong></span>
+                        </h1>
+                    </section>
+                </div>
+            </div>
+        </header>
+        <section role="main" class="boxConteudo">
+            <div id="loginSobre">
+                <div id="apresentacaoLogin" class="blocoLogin container space-v">
+                    <div class="col-xs-12 clearpad">
+                        <section class="apresentacaoLogin">
+                            <p class="text-white">
+                                Sistema para Monitoramento de Redes Sensoras em Cenários Metropolitanos.
+                            </p>
+<!--                            <button type="button" class="btn btn-primary btn-xs pull-right" title="Clique para saber um pouco mais sobre o IgnisMundo">saiba mais <span class="glyphicon glyphicon-chevron-right"></span></button>-->
+                        </section>
+                    </div>
+                </div>
+                <div id="formularioLogin" class="blocoLogin container space-v">
+                    <div class="col-xs-12 clearpad">
+                        <section class="formularioLogin">
+                            <div id="loginForm">
+                                <h2 class="text-white">Acesso</h2>
+                                <form method="POST" action="/login" onsubmit="return validaLogin();">
+                                    <div class="form-group">
+                                        <label class="exibeIE" for="loginUsuario">E-Mail:</label>
+                                        <input class="form-control" type="text" placeholder="Digite seu e-mail" id="loginUsuario" name="loginUsuario" title="Digite aqui o seu e-mail"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="exibeIE" for="senhaUsuario">Senha:</label>
+                                        <input class="form-control" type="password" placeholder="Digite sua senha" id="senhaUsuario" name="senhaUsuario" title="Digite aqui sua senha"/>
+                                    </div>
+                                    <span class="text-primary cursor-pointer pull-right" title="Clique aqui para recuperar sua senha" onclick="toggleDivs('#loginForm', '#recuperarForm');"><strong>Esqueci minha senha</strong></span>                                    
+                                    <input class="btn btn-primary" type="submit" value="Entrar" data-toggle="tooltip" data-placement="top" title="Clique para entrar" />
+                                </form>
+                                <?php if ($sessao->hasIdentity()):
+                                    $nomeUsuario = $sessao->getIdentity()->nm_usuario;
+                                    ?>
+                                    <hr/>
+                                    <div class="alert alert-warning">
+                                        <p>
+                                            <strong>Atenção:</strong> Você já está logado como <strong><?php echo $nomeUsuario; ?></strong>.
+                                        </p>
+                                        <p class="text-center">
+                                            <a href="/" title="Clique aqui para ir à página inicial"><button class="btn btn-xs btn-primary space-h">Página Inicial</button></a>
+                                            <a href="/login/logout" title="Clique aqui para efetuar logout"><button class="btn btn-xs btn-warning space-h">Sair</button></a>
+                                        </p>
+                                    </div>
+<?php endif; ?>
+                                <hr/>
+                                <!--<h3 class="text-white text-center">Ainda não tem uma conta?</h3>
+                                <button id="buttonCadastro" class="btn btn-success btn-lg btn-block" title="Clique para fazer parte do IgnisMundo" onclick="fazerParte();">Faça parte!</button>-->
+                            </div>
+                            <div id="recuperarForm">
+                                <h2 class="text-white">Recupere sua Senha:</h2>
+                                <form methos="POST" action="/login/recuperar">
+                                    <div class="form-group">
+                                        <label class="exibeIE" for="emailRecuperar">E-Mail Cadastrado:</label>
+                                        <input class="form-control" type="text" placeholder="Digite o e-mail cadastrado" id="emailRecuperar" title="Diite o e-mail utilizado no cadastro"/>
+                                    </div>
+                                    <input class="btn btn-primary" type="button" value="Recuperar Minha Senha" title="Clique aqui para recuperar sua senha" onclick="recuperarSenha();"/>
+                                    <input class="btn btn-warning" type="button" value="Voltar" title="Clique aqui para voltar ao login" onclick="toggleDivs('#recuperarForm', '#loginForm');"/>
+                                </form>
+                            </div>
+                            <div id="cadastroForm">             
+                                <h2 class="text-white">Crie seu perfil!</h2>
+                                <form id="formCadastro" method="POST" action="/cadastro/novaconta">
+                                    <div class="form-group">
+                                        <label class="exibeIE" for="nomeUsuario">Nome:</label>
+                                        <input class="form-control" type="text" placeholder="Digite seu Nome" id="nomeUsuario" name="nomeUsuario" title="Digite aqui o seu nome"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="exibeIE" for="emailUsuario">E-mail:</label>
+                                        <input class="form-control" type="text" placeholder="Digite seu E-mail" id="emailUsuario" name="emailUsuario" title="Digite aqui o seu e-mail"/>
+                                    </div>
+                                    <div class="form-group text-center">
+                                        <label class="exibeIE" for="senhaCadUsuario">Senha:</label>
+                                        <input class="form-control" type="password" placeholder="Digite sua Senha" id="senhaCadUsuario" name="senhaCadUsuario" title="Digite aqui sua senha"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="exibeIE" for="confSenhaUsuario">Confirme sua Senha:</label>
+                                        <input class="form-control" type="password" placeholder="Digite sua Senha Novamente" id="confSenhaUsuario" title="Digite novamente sua senha"/>
+                                    </div>
+                                    <hr/>
+                                    <input class="btn btn-success btn-lg" type="button" value="Criar Conta" title="Quero fazer parte!" onclick="validaCadastro();"/>
+                                    <input class="btn btn-info btn-sm" type="button" value="Voltar" title="Clique aqui para voltar ao login" onclick="retornaLogin();"/>
+                                </form>
+                            </div>
+                            <div id="alert">
+                                <?php if (isset($this->mensagemErro)): ?>
+                                    <div class="alert alert-danger"><?php echo $this->mensagemErro; ?></div>
+<?php endif; ?>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <section class="boxConteudo text-center">
+                <nav>
+                    <ul class="list-inline">
+                        <li class="text-white col-xs-12">Sigma©2013</li>
+                        <!--                        <li><a href="#">Lorem</a></li>
+                                                <li><a href="#">Ipsum</a></li>
+                                                <li><a href="#">Dolor</a></li>
+                                                <li><a href="#">Sit</a></li>
+                                                <li><a href="#">Amet</a></li>-->
+                    </ul>
+                </nav>
+            </section>
+        </footer>
+        <script type="text/javascript" src="/js/libs/jquery-1.8.1.min.js"></script>
+        <script type="text/javascript" src="/js/libs/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/libs/pwstrength.js"></script>        
+        <script type="text/javascript" src="/js/login.js"></script>
+        <script>$('input').tooltip();</script>
+    </body>
+</html>

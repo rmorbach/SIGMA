@@ -1,0 +1,33 @@
+<?php if (count($this->logs) > 0): ?>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+            <div class="page-header">
+            <h2>Notificações do gateway: <?php echo utf8_decode($this->nmGateway);?> </h2>
+            </div>
+            <div class="table-responsive">
+                <table class="table-striped table table-bordered">
+                    <tr>
+                        <th>Código</th><th>Mensagem</th><th>Data e hora</th>                        
+                    </tr>                       
+                    <?php foreach($this->logs as $log):?>
+                    <tr>
+                        <td>
+                            <?php echo utf8_decode($log['cd_alerta']);?>
+                        </td>
+                        <td>
+                            <?php echo utf8_decode($log['ds_log_alerta']);?>
+                        </td>
+                        <td>
+                            <?php echo date("d/m/Y H:i:s", strtotime($log['dt_hr_registro'])); ?>
+                        </td>
+                    </tr>
+                    <?php endforeach;?>                                            
+                </table>
+            </div>
+        </div>
+    </div>
+<?php else: ?>
+
+    <div class="alert alert-danger"><h3>Nenhum log encontrado</h3></div>
+
+<?php endif; ?>

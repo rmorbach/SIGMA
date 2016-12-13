@@ -1,0 +1,73 @@
+<?php // echo $this->headLink()->appendStylesheet('/css/cadastrarSecao.css');        ?>
+<div class="container" role="main">    
+    <div class="col-xs-12 clearpad col-md-12">
+        <div class="col-xs-12">
+            <nav role="navigation">
+                <h3><ol class="breadcrumb"><li><strong class="hidden-xs"><?php echo $this->nmCidade; ?></strong></li><li class="active"><a href="/locais/exibelocal/id/<?php echo $this->idLocal; ?>" title="Visualizar local"><strong><?php echo $this->nmLocal; ?></strong></a></li><li>Cadastrar seção</li></ol></h3>
+            </nav>
+        </div>    
+    </div>
+    <div class="col-xs-12 clearpad col-md-8">
+        <form id="formCadastroSecao" role="form" class="form-horizontal">
+            <fieldset>
+                <legend>Dados</legend>
+                <div class="form-group">
+                    <label for="nmSecao">Nome da seção</label>
+                    <input type="text" id="nmSecao" name="nmSecao"  class="form-control" placeholder="Diretoria, Copa, Almoxarifado...">
+                </div>           
+                <div id="divDescricaoSecao" class="form-group">
+                    <label class="sr-only" for="descricaoSecao">Descrição da secao</label>
+                    <textarea class="form-control" maxlength="512" name="descricaoSecao" required id="descricaoSecao" placeholder="Descrição breve da seção" rows="4"></textarea>
+                </div>                  
+                <div class="row form-group">
+                    <div class="col-lg-5">
+                        <label for="selectTipoSecao">Tipo</label>
+                        <select id="selectTipoSecao" class="form-control">
+                            <option value="Sala" selected>Área fechada</option>
+                            <option value="Livre">Ao ar livre</option>                            
+                        </select>
+                    </div>    
+                </div>                    
+                <div class="form-group">
+                    <fieldset class='clearpad'>
+                        <legend>Gateway</legend>                                               
+                        <div class="col-lg-4 col-md-4 col-xs-12">                       
+                            <label for="endIp">Endereço IP</label>
+                            <input type="text" id="endIp" name="endIp"  class="form-control" placeholder="xxx.xxx.xxx">                        
+                        </div>
+                        <div class="col-lg-4 col-xs-12 col-md-4">                       
+                            <label for="nmGateway">Nome do gateway</label>
+                            <input type="text" id="nmGateway" name="nmGateway"  class="form-control" placeholder="Texto de identificação">                        
+                        </div>                               
+                        <div class="col-lg-5 col-md-5 col-xs-12" id="form-autenticacao">                                
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="check-auth"> Utiliza autenticação
+                                </label>
+                            </div>         
+                            <div class="form-group">
+                                <label for="user-gateway">Usuário:</label>
+                                <input type="text" placeholder="Informe o usuário" class="form-control" readonly name="user-gateway" id="user-gateway"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="senha-gateway">Senha:</label>
+                                <input type="password" placeholder="Informe a senha" class="form-control" readonly name="senha-gateway" id="senha-gateway"/>
+                            </div>
+                        </div>                                                 
+                    </fieldset>                
+                </div>                
+                <div id="alerta"></div>
+            </fieldset>
+        </form>    
+        <div class="form-group">
+            <button id='cadastrarSecao' class="btn btn-success disabled"  title="Clique para cadastrar uma seção" onclick="cadastrarSecao()">Cadastrar <span class="glyphicon glyphicon-ok"></span></button>
+            <button class="btn btn-warning" type="reset" title="Limpar dados" id="btnLimpar">Limpar</button>
+        </div>
+        <div id='alerta'></div>
+    </div>
+    <script src="/js/cadastrarSecao.js"></script>
+    <script src="/js/libs/jquery.mask.min.js"></script>
+    <script>
+                        var id_local = '<?php echo $this->idLocal; ?>'
+    </script>
+</div>    

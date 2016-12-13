@@ -1,0 +1,12 @@
+/* 
+    Document   : cadastrarSecao
+    Created on : 22/09/2013, 13:29:19
+    Author     : Morbach
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+#divDescricaoSecao textArea { 
+    height: 200px !important; 
+}
+

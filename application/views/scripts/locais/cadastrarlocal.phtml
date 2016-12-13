@@ -1,0 +1,49 @@
+<div  class="col-xs-12 clearpad col-md-12">
+    <h3><ol class="breadcrumb"><li><strong>Cadastrar novo local</strong></li></ol></h3>
+    <div class="col-xs-12 col-md-10">       
+        <form id="formCadastroLocal" action="/locais/salvarlocal" class="form-horizontal" onsubmit="return false;" role="form">
+            <div class="form-group">
+                <label for="nmLocal">Nome do local</label>
+                <input type="text" id="nmLocal" name="nmLocal"  class="form-control" placeholder="Informe o nome do local">
+            </div>
+            <div class="form-group">
+                <label for="endereco">Endereço</label>
+                <input type="text" id="endereco" name="endereco"  class="form-control" placeholder="Digite o endereço e pressione Enter">
+            </div>  
+            <div id="descricao" class="form-group">
+                <label class="sr-only" for="descricaoLocal">Descrição Local</label>
+                <textarea class="form-control" maxlength="512" name="descricaoLocal"   id="descricaoLocal" placeholder="Descrição do local" rows="4"></textarea>
+            </div>  
+            <!--<div class="form-group">
+                <div class="row">
+                    <div class="col-lg-5 col-xs-12">
+                        <label for="selectCidades">Cidade</label>
+                        <select id="selectCidades" class="form-control col-lg-5"></select>
+                    </div><!--
+                    <div class="col-lg-3 col-xs-12">
+                        <label for="latitude">Latitude</label>
+                        <input type="text" id="latitude" name="latitude"  class="form-control col-lg-3" placeholder="Coordenadas geográficas">
+                    </div>
+                    <div class="col-lg-3 col-xs-12">
+                        <label for="longitude">Longitude</label>
+                        <input type="text" id="longitude" name="longitude"  class="form-control col-lg-3" placeholder="Coordenadas geográficas">
+                    </div>
+                </div>               
+            </div>-->
+            <div class="form-group">
+                <div class="row">                  
+                    <label>Marque o local no mapa</label>                    
+                    <div class="col-lg-12 col-md-11 col-xs-12" id="map_canvas"></div>
+                </div>                  
+            </div>
+            <div class="form-group">
+                <button id='cadastrarLocal' class="btn btn-success disabled" onclick="cadastrarLocal()"  title="Clique para cadastrar o local">Cadastrar <span class="glyphicon glyphicon-ok"></span></button>
+                <button class="btn btn-warning" id="btnLimpar" type="reset" title="Limpar dados">Limpar</button>
+            </div>
+            <div id="alerta"></div>
+        </form>    
+    </div>
+</div>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+<script src="/js/cadastrarLocal.js"></script>
+<script src="/js/mapsCadastrarLocal.js"></script>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mp:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:mp="http://www.w3.org/2001/XMLSchema">
+  <mp:element name="map">
+    <mp:complexType>
+      <mp:sequence>
+        <mp:element name="to">
+          <mp:complexType>
+            <mp:sequence>
+              <mp:element type="mp:string" name="protocol"/>
+              <mp:element name="command" maxOccurs="unbounded" minOccurs="0">
+                <mp:complexType>
+                  <mp:sequence>
+                    <mp:element type="mp:string" name="from"/>
+                    <mp:element type="mp:string" name="equal"/>
+                    <mp:element name="options" minOccurs="0">
+                      <mp:complexType>
+                        <mp:sequence>
+                          <mp:element name="command" maxOccurs="unbounded" minOccurs="0">
+                            <mp:complexType>
+                              <mp:sequence>
+                                <mp:element type="mp:string" name="from"/>
+                                <mp:element type="mp:byte" name="equal"/>
+                              </mp:sequence>
+                            </mp:complexType>
+                          </mp:element>
+                        </mp:sequence>
+                      </mp:complexType>
+                    </mp:element>
+                  </mp:sequence>
+                </mp:complexType>
+              </mp:element>
+            </mp:sequence>
+          </mp:complexType>
+        </mp:element>
+      </mp:sequence>
+    </mp:complexType>
+  </mp:element>
+</mp:schema>

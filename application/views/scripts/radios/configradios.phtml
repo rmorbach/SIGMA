@@ -1,0 +1,79 @@
+<div class="row">        
+    <?php 
+   //Se nenhuma mensagem de erro for encontrada, exibe o conteúdo normalmente.
+        if(!$this->msgErro): 
+    ?>
+    <div class="page-header">
+        <h3><ol class="breadcrumb"><li><span class="hidden-xs">Seções</span></li><li class="active"><strong><a href="/locais/exibelocal/id/<?php echo $this->idLocal; ?>" title="Visualizar local"><?php echo $this->local; ?></a></strong></li> <li><strong><a href="/secoes/index/local/<?php echo $this->local ?>/idlocal/<?php echo $this->idLocal ?>/id/<?php echo $this->idSecao ?>" title="Clique para voltar para a seção"><?php echo $this->secao; ?></a></strong></li></ol></h3>
+    </div>    
+    <div class="col-lg-6 col-md-6 col-xs-12">
+        <div id="alerta"></div>
+        <?php if ((!empty($this->config)) && (!isset($this->config['desc']))): ?>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Configurações do rádio <span class="nm_radio"><?php echo $this->config['node_id']; ?></span></h3>
+                </div>
+                <div class="panel-body" id="body-config">       
+                    <div class="row clearpad">      
+                        <form id="form-config">
+                            <?php foreach ($this->config as $key => $value): ?>                                                       
+                                <div class="input-group form-control">
+                                    <span class="input-group-addon span-radio"><?php echo ucfirst($key); ?></span>                              
+                                    <input class="form-control" type="text" name="<?php echo $key ?>"value="<?php echo $value ?>" id="<?php echo $key ?>" title="<?php echo $value ?>"/>
+                                </div>                                                                  
+                            <?php endforeach; ?>                               
+                        </form>
+                    </div>
+                    <button class="btn btn-success disabled pull-right" onclick="alteraConfiguracaoRadio('form-config')">Aplicar</button>
+                </div>
+            </div> 
+        <?php elseif (isset($this->config['desc'])): ?>
+
+            <?php if ($this->config['desc'] == "Internal error (load failed)"): ?>
+                <div class="alert alert-danger">Não foi possível acessar o nó. Erro em: <?php echo $this->config['hint']; ?></div>
+            <?php endif; ?>
+
+        <?php endif; ?>
+    </div> 
+    <div class="col-lg-6 col-md-6 col-xs-12">
+        <?php if ((!empty($this->estado)) && (!isset($this->estado['desc']))): ?>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Estado do rádio  <span class="nm_radio"><?php echo $this->config['node_id']; ?></span></h3>
+                </div>
+                <div class="panel-body" id="body-estado"> 
+                    <div class="row clearpad">
+                        <form id="form-estado">
+                            <?php foreach ($this->estado as $key => $value): ?>                             
+                                <div class=" form-control input-group">
+                                    <span class="input-group-addon span-radio"><?php echo ucfirst($key); ?></span>     
+                                    <input class="form-control"  readonly type="text" name="<?php echo $key ?>" value="<?php echo $value ?>" id="<?php echo $key ?>" title="<?php echo $value ?>"/>
+                                </div>                                                                  
+                            <?php endforeach; ?>                             
+                        </form>
+                    </div>  
+                    <button class="btn btn-success pull-right" type="submit" onclick="alteraConfiguracaoRede('form-estado', '<?php echo $this->mac_radio; ?>')">Salvar Estado</button>
+                </div>
+            </div> 
+        <?php elseif (isset($this->estado['desc'])): ?>
+
+            <?php if ($this->estado['desc'] == "Internal error (load failed)"): ?>
+                <div class="alert alert-danger">Não foi possível acessar o nó. Erro em: <?php echo $this->estado['hint']; ?></div>
+            <?php endif; ?>
+
+        <?php endif; ?>
+    </div>  
+    <?php //Exibe erro identificado
+        else: 
+     ?>
+     <div class="alert alert-danger"><?php echo $this->msgErro; ?></div>
+    <?php endif; ?>
+</div>
+<script>
+    var mac = '<?php echo $this->mac_radio; ?>';
+    var gateway = '<?php echo $this->gateway; ?>';
+    var idradio = '<?php echo $this->idRadio; ?>';
+    var idgateway = '<?php echo $this->idGateway; ?>';
+    var opt = '<?php echo trim($this->opt); ?>';
+</script>    
+<script src="/js/configradios.js"></script>

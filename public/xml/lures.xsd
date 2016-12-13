@@ -1,0 +1,17 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:element name="lures">
+ <xs:complexType>
+  <xs:sequence>
+   <xs:element name="lure">
+    <xs:complexType>
+     <xs:sequence>
+     <xs:element name="lureName" type="xs:string"/>
+     <xs:element name="lureCompany" type="xs:string"/>
+     <xs:element name="lureQuantity" type="xs:integer"/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+  </xs:sequence>
+ </xs:complexType>
+</xs:element>
+</xs:schema>

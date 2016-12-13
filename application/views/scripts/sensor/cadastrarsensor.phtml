@@ -1,0 +1,25 @@
+<div class="form-group">
+    <fieldset>
+        <legend>Cadastrar Sensor</legend>
+        <div class="form-group">
+            <label for="nm_sensor">Nome do sensor</label>
+            <input type="text" id="nm_sensor" class="form-control" placeholder="Informe o nome do sensor" required/>
+        </div>     
+        <div class="form-group">
+            <label for="ds_sensor">Descrição do sensor</label>
+            <textarea row="2" class="form-control" id="ds_sensor" placeholder="Descrição"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="fl_unidade">Sigla da unidade de medida</label>
+            <input type="text" class="form-control" id="fl_unidade" placeholder="Sigla para a unidade de medida" required/>
+        </div>
+        <div class="form-group">
+            <label for="nm_unidade">Nome da unidade de medida</label>
+            <input type="text" class="form-control" id="nm_unidade" placeholder="Sigla para a unidade de medida" required/>
+        </div> 
+        <div class="form-group">
+            <button class="btn btn-success" onclick="salvarSensor()">Salvar</button>
+            <button class="btn btn-warning" onclick="cancelarSensor()">Cancelar</button>
+        </div>
+    </fieldset>
+</div>    

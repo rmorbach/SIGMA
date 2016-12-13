@@ -1,0 +1,14 @@
+/* 
+    Document   : login
+    Created on : 10/09/2013, 09:54:22
+    Author     : Morbach
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+.form-singin{
+    max-width: 300px;
+}

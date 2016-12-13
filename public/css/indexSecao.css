@@ -1,0 +1,16 @@
+/* 
+    Document   : indexSecao
+    Created on : 28/11/2013, 14:33:04
+    Author     : Morbach
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.span-radio{  text-align: justify; width: 150px !important;} 
+.div-status{width: 25px; height: 25px; -moz-border-radius: 15px; border-radius: 15px; -webkit-border-radius: 15px; text-align: center;}
+.idle-status{background: #999; border: solid 0.5px #666;}
+.up-status{background: #0f0;border: solid 0.5px #666;}
+.down-status{background: #f00;border: solid 0.5px #666;}
+#canvas-topology{margin: auto;}
+#div-topologia div{display: none; border: solid 1px #0e90d2; margin-left: 30px;}
+.icon-refresh{background: url('/images/loading_sensor.gif') no-repeat;}

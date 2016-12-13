@@ -1,0 +1,156 @@
+<?php
+$sessao = Zend_Auth::getInstance();
+if ($sessao->hasIdentity()):
+    $idUsuario = $sessao->getIdentity()->id;
+    ?>
+    <!DOCTYPE html>
+    <html lang="pt-br">
+        <head>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+            <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">           
+            <!--<title>Sigma</title>-->
+            <!--[if lt IE 9]><script type="text/javascript" src="/js/libs/html5shiv.min.js"></script><![endif]-->
+            <link type="text/css" rel="stylesheet" href="/css/libs/layout.css">
+            <link type="text/css" rel="stylesheet" href="/css/libs/bootstrap.min.css">        
+            <script type="text/javascript" src="/js/libs/jquery-1.8.1.min.js"></script>
+            <script type="text/javascript" src="/js/libs/bootstrap.min.js"></script>
+            <script type="text/javascript" src="/js/libs/bootbox.min.js"></script>            
+            <script type="text/javascript" src="/js/libs/layout.js"></script>
+        </head>
+        <body>
+            <header class="corPrincipal" role="navigation">
+                <section class="boxConteudo">
+                    <nav class="navbar" role="navigation">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                            <span class="col-xs-6 navbar-toggle pull-right text-white">                                
+                                <a class="col-xs-10 menuMobileHover" title="Menu" ><span class="pull-right glyphicon glyphicon-th-list" data-toggle="collapse" data-target=".navbar-ex1-collapse"></span></a>                                       
+                                <a href="/login/logout" title="Sair"><span class="pull-right glyphicon glyphicon-off"></span></a>
+                            </span>                            
+                            <a class="navbar-brand" href="/index" title="Início">Sigma</a>                            
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse navbar-ex1-collapse">
+                            <ul class="nav navbar-nav">                                       
+                                <li class="dropdown hidden-xs">                                     
+                                    <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Locais <b class="caret"></b></a>
+                                    <ul class="dropdown-menu" id='menu-locais'>
+                                        <li id='menuLocais'>                                                                                        
+                                            <a href="/locais/cadastrarlocal" title="Adicione um local!">Cadastrar Local <span class="glyphicon glyphicon-plus pull-right margin-icons"></span></a>
+                                            <?php $locais = $this->locais(null, $idUsuario); ?>                                            
+                                            <?php if (!empty($locais)) : ?>
+                                                <?php
+                                                foreach ($locais as $local) :                                                    
+                                                    $titleLocal = $local['nm_local'];
+                                                    ?> 
+                                                    <?php
+                                                    $local['nm_local'] = utf8_encode($local['nm_local']);
+                                                    if (strlen($local['nm_local']) > 20):
+                                                        $local['nm_local'] = substr(($local['nm_local']), 0, 17) . "...";
+                                                    endif;
+                                                    ?>
+                                                <li> <a href="/locais/exibelocal/id/<?php echo $local['id']; ?>" id='<?php echo $local['id']; ?>' id_local="<?php echo $local['id'] ?>" title="<?php echo utf8_encode($titleLocal); ?>">
+                                                        <?php echo $local['nm_local']; ?> 
+                                                        <?php if ($local['in_ativo'] == "N"): ?>
+                                                            <span class="glyphicon glyphicon-trash pull-right clearpad margin-icons" title="Gerenciar Local"></span>                                  
+                                                        <?php else: ?>
+                                                            <span class="glyphicon glyphicon-tower pull-right clearpad margin-icons" title="Gerenciar Local"></span>                                    
+                                                        <?php endif; ?>
+                                                    </a>                                                
+                                                </li>
+                                            <?php endforeach; ?>
+                                        <?php else : ?>
+                                            <div id="alertaLocal" class="alert alert-info">Nenhuma localidade cadastrada.</div>
+                                        <?php endif; ?>                                                     
+                                </li>                                                            
+                            </ul>
+                            </li>                            
+                            </ul>                                                            
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="/alarmes" class="navbar-brand hidden-xs">Alarmes <span class="glyphicon glyphicon-info-sign"></span></a></li>
+                                <li class="dropdown hidden-xs">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-wrench"><b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/configuracoes" title="Configurações">Minha Conta</a></li>
+                                        <!--<li><a href="#" title="Configurações">Permissões</a></li>-->
+                                    </ul>
+                                </li>                                  
+                                <li class="visible-xs"> <a href="/alarmes" title="Alarmes"><span class="glyphicon glyphicon-info-sign"></span><span class="visible-xs col-xs-11 pull-right">Alarmes</span></a></li>
+                                <li class="visible-xs"> <a href="/configuracoes" title="Minha conta"><span class="glyphicon glyphicon-user"></span><span class="visible-xs col-xs-11 pull-right">Minha conta</span></a></li>
+                               <!-- <li class="visible-xs"> <a href="#" title="Permissões"><span class="glyphicon glyphicon-wrench"></span><span class="visible-xs col-xs-11 pull-right">Permissões</span></a></li> -->
+                                <li class="hidden-xs"> <a href="/login/logout" title="Sair"><span class="glyphicon glyphicon-off"></span><span class="visible-xs col-xs-11 pull-right">Sair</span></a></li>                                
+                            </ul>
+                            <div class="container visible-xs pointer">
+                                <div class="navbar-header boxLocais">
+                                    <span class="col-xs-12 navbar-toggle collapsed pull-left" data-toggle="collapse" data-target=".lateralLinks">
+                                        <span class="pull-left" title="Todas as localidades">Localidades</span>                               
+                                        <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+                                    </span>                         
+                                </div>                         
+                            </div>
+                        </div><!-- /.navbar-collapse -->
+                    </nav>
+                </section>
+            </header>
+            <section role="main" class="boxConteudo container">   
+                <div class="visible-xs col-xs-12">                 
+                    <ul class="nav lateralLinks collapse navbar-collapse" role="navigation">
+
+                        <li id='menuLocais'>
+
+                            <a class="hidden-xs" href="#" title="Localidades">Localidades<span class="glyphicon glyphicon-book pull-right"></span></a>
+                            <a href="/locais/cadastrarlocal" title="Adicione um local!">Cadastrar Local <span class="glyphicon glyphicon-plus pull-right"></span></a>                           
+                            <?php $locais = $this->locais(null, $idUsuario); ?>
+
+                            <?php if (!empty($locais)) : ?>
+
+                                <?php foreach ($locais as $local) : ?> 
+
+                                    <a href="/locais/exibelocal/id/<?php echo $local['id']; ?>" id='<?php echo $local['id']; ?>' id_local="<?php echo $local['id'] ?>" title="<?php echo utf8_encode($local['nm_local']); ?>">
+
+                                        <?php echo utf8_encode($local['nm_local']); ?> 
+
+                                        <span class="glyphicon glyphicon-tower pull-right" title="Gerenciar Local"></span>                                    
+
+                                    </a>
+
+                                <?php endforeach; ?>
+
+                            <?php else : ?>
+                                <div id="alertaLocal" class="alert alert-info">Nenhuma localidade cadastrada.</div>
+                            <?php endif; ?>         
+                        </li>  
+                    </ul>
+                </div>
+                <section class="col-xs-12" role="main">
+                    <div class="col-xs-12">
+
+                        <?php echo $this->layout()->content; ?>
+
+                    </div>
+                </section>    
+
+            </section>
+
+            <footer>
+                <section class="boxConteudo text-center">
+                    <nav>
+                        <ul class="list-inline">
+                            <li class="col-xs-12">Sigma © 2013</li>
+                            <li><a href="#">Privacidade</a></li>
+                            <li><a href="#">Termos de uso</a></li>                            
+                        </ul>
+                    </nav>
+                </section>
+            </footer>                
+        </body>
+    </html>
+    <?php
+else:    
+   error_reporting(E_ALL); 
+   ini_set('display_errors', 'On');
+   header('location:/login');
+endif;
+?>

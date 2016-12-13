@@ -1,0 +1,69 @@
+<?php echo $this->headLink()->appendStylesheet('/css/exibelocal.css'); ?>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+<?php if (isset($this->dados)): ?>
+    <script>
+        var latitude = '<?php echo $this->dados['vl_latitude']; ?>';
+        var longitude = '<?php echo $this->dados['vl_longitude']; ?>';
+        var nm_local = '<?php echo $this->dados['nm_local']; ?>';
+        var id_local = "<?php echo $this->idlocal; ?>";
+    </script>    
+<?php endif; ?>
+<!-- Mensagens de feedback para o usuário -->
+<div id="alerta" class="col-xs-12"></div>
+<div class="page-header col-md-12 col-xs-12">
+    <h3><ol class="breadcrumb"><li><strong class="hidden-xs">Locais</strong></li><li><strong><?php echo utf8_encode($this->dados['nm_cidade']); ?> - <?php echo $this->dados['sg_estado']; ?></strong></li><li class="active"><strong><?php echo utf8_encode($this->dados['nm_local']); ?></strong></li></ol></h3>
+</div>
+<div class="row"><!-- Abraça as duas colunas -->      
+    <div class="col-xs-12 col-md-6">    
+        <?php if (isset($this->dados)): ?>                   
+            <div class="col-md-7 col-xs-9">                    
+                <p class="lead"><?php echo utf8_encode(($this->dados['ds_local'])); ?></p>
+                <address class="text-left" title="Endereço"><?php echo utf8_encode($this->dados['endereco']); ?></address>
+            </div>         
+            <div class="col-md-4 col-xs-2 pull-right">
+                <?php if ($this->dados['in_ativo'] == "S"): ?>
+                    <button type="button" class="btn btn-danger" <?php if (!empty($this->idlocal)): ?>id="btn-<?php echo $this->idlocal; ?>" onclick="mudarStatusLocal(<?php echo $this->dados['id']; ?>, '<?php echo $this->dados['in_ativo'] ?>')" <?php endif; ?>><span class="hidden-xs">Remover Local <span class="glyphicon glyphicon-trash"></span></span><span class="glyphicon glyphicon-trash visible-xs"></span></button>
+                <?php else: ?>
+                    <button type="button" class="btn btn-success" <?php if (!empty($this->idlocal)): ?>id="btn-<?php echo $this->idlocal; ?>" onclick="mudarStatusLocal(<?php echo $this->dados['id']; ?>, '<?php echo $this->dados['in_ativo'] ?>')" <?php endif; ?>><span class="hidden-xs">Restaurar Local <span class="glyphicon glyphicon-refresh"></span></span><span class="visible-xs glyphicon glyphicon-refresh"></span></button>
+                <?php endif; ?>
+            </div> 
+        <?php endif; ?>   
+        <div class="row">
+            <!-- Mapa com a localização do prédio -->
+            <?php if ((!empty($this->dados['vl_latitude'])) && (!empty($this->dados['vl_longitude']))): ?>
+                <div class="col-xs-12 table-bordered" id="map_canvas"> </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6 columnBorderLeft" id="secoes">    
+            <div class="col-xs-12"> 
+                <ul class="list-inline"><li><h3 class="clearpad">Seções</h3></li> <li> <a href="/secoes/cadastrarsecao/idcidade/<?php
+                        echo $this->dados['id_cidade'];
+                        ;
+                        ?>/idlocal/<?php echo $this->idlocal; ?>" class="btn btn-primary btn-sm" title='Cadastrar seção'><span class="hidden-xs">Cadastrar seção <span class="glyphicon glyphicon-plus"></span></span><span class='visible-xs glyphicon glyphicon-plus'></span></a></li></ul>
+            </div>
+            <div class="col-xs-12 panel panel-default">        
+                <?php if (!empty($this->secoes)): ?>
+                    <?php foreach ($this->secoes as $key => $secao): ?>                                           
+                <h4 class="panel-title">Local: <a href="/secoes/index/local/<?php echo utf8_encode($this->dados['nm_local']); ?>/idlocal/<?php echo $this->dados['id']; ?>/id/<?php echo $secao['id']; ?>" class="btn btn-default" title="Clique para mais informações sobre <?php echo utf8_encode($secao['nm_secao']); ?>"><?php echo utf8_encode($secao['nm_secao']); ?></a></h4>
+                        <div class="panel-body">                    
+                            <p class="text-info">Descrição: <?php echo utf8_encode($secao['ds_secao']); ?></p>
+                            <p class="text-info">Sensores: <span class='badge'><?php echo $secao['qtd_sensores']; ?></span></p>                                
+                        </div>
+                        <hr />
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="alert alert-info"><p>Nenhuma seção cadastrada.<a href="/secoes/cadastrarsecao/idcidade/<?php
+                            echo $this->dados['id_cidade'];
+                            ;
+                            ?>/idlocal/<?php echo $this->idlocal; ?>"><span class="text-info">Clique para cadastrar</a></span></p>
+                    </div>        
+                <?php endif; ?>
+            </div>
+        </div>
+    </div
+</div>
+</div>
+<script src="/js/exibelocal.js"></script>
+<script src="/js/mapsExibeLocal.js"></script>

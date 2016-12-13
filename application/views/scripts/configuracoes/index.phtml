@@ -1,0 +1,83 @@
+<?php $this->headScript()->appendFile('/js/libs/jquery.mask.min.js'); ?>
+<?php $this->headScript()->appendFile('/js/libs/jquery.mask.min.js'); ?>
+<?php echo $this->headScript()->appendFile('/js/configuracoes.js'); ?>
+<?php $this->headLink()->appendStylesheet("/css/configuracoes.css"); ?>
+<?php echo $this->headLink(); ?>
+<h2 class="page-header"><?php echo $this->nmUsuario; ?></h2>
+
+<div class="row">
+
+    <section class="col-lg-12">
+
+        <p class="corPrincipalTexto">Minha Conta <span class="glyphicon glyphicon-cog"></span></p>
+
+        <ul class="nav nav-pills" id="perfilTab">
+            <li class="active"><a href="#pessoalPerfil" title="Altere seus dados pessoais">Pessoal</a></li>
+            <li><a href="#pessoalDadosAcesso" title="Altere seus dados de acesso">Dados de Acesso</a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div class="tab-pane active" id="pessoalPerfil">
+
+                <div class="row">
+                    <div class="col-lg-4 form-group col-xs-10">
+                        <label for="nomeUsuario">Nome completo: </label>
+                        <input id="nomeUsuario" type="text" class="form-control" placeholder="Seu nome" value="<?php echo $this->nmUsuario; ?>"  />
+                    </div>                            
+                    <div class="col-lg-3 form-group col-xs-10">
+                        <label for="selectGrupo">Grupo de usuários</label>
+                        <select id="selectGrupo" class="form-control">
+                        </select>
+                    </div>                    
+                    <div class="col-lg-3 col-xs-7 form-group">                    
+                        <label for="telefone">Telefone: </label>
+                        <input id="telefone" type="text" class="form-control" placeholder="(xx) xxxxx-yyyy" <?php if(!empty($this->telefoneUsuario)): ?> value="<?php echo $this->telefoneUsuario; ?>"  <?php endif; ?>/>                    
+                    </div>
+                    <div class="col-lg-1 col-xs-5 form-group">                    
+                        <label for="genero">Genero: </label>
+                         <select id="genero" class="form-control">
+                             <option value="M"<?php if($this->generoUsuario == "M"): ?>selected <?php endif; ?>>M</option>
+                             <option value="F" <?php if($this->generoUsuario == "F"): ?>selected <?php endif; ?>>F</option>
+                        </select>
+                    </div>
+                </div>                    
+            </div>
+
+            <div class="tab-pane" id="pessoalDadosAcesso">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-4 col-xs-10">
+                            <label for="login">Seu login: </label>
+                            <input id="login" type="text" class="form-control"  value="<?php echo $this->emailUsuario; ?>" placeholder="Seu e-mail"/>
+                        </div>                    
+                        <div class="col-lg-4 col-xs-2">
+                            <button class="btn btn-primary visible-xs" title="Clique para alterar a senha" id="btnAlterarSenhaS"> <span class="glyphicon glyphicon-pencil"></span></button>                             
+                            <button class="btn btn-primary hidden-xs" title="Clique para alterar a senha" id="btnAlterarSenhaN">Alterar senha <span class="glyphicon glyphicon-pencil"></span></button>                             
+                        </div>                      
+                    </div>     
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-lg-4 col-xs-10" id="divEditarSenha">
+                        <div class="form-group">
+                            <label for="senhaAtual">Senha atual: </label>                            
+                            <div class="text-center"><input id="senhaAtual" type="password" placeholder="Informe sua senha atual" class="form-control"  /></div>                                
+                        </div>
+                        <div class="form-group">
+                            <label for="novaSenha">Nova senha: </label>                            
+                            <div class="text-center"><input id="novaSenha" type="password" placeholder="Informe a nova senha"class="form-control"  /></div>                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="msgAlerta"></div>        
+
+        <div class="form-group">
+            <button class="btn btn-success disabled" id="btnSalvar" title="Salvar Alterações" onclick="atualizarDados()">Salvar <span class="glyphicon glyphicon-ok"></span></button>
+            <!--<button class="btn btn-warning" title="Limpar Alterações" type="reset">Limpar</button>-->
+        </div>
+
+    </section>    
+</div>
